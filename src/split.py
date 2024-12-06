@@ -15,7 +15,7 @@ parser.add_argument('--output_dir', required=False, default=datetime.now().strft
 args = parser.parse_args()
 
 target_dir = Path.cwd() / 'data'/ 'temp'/ args.target_dir
-output_dir = Path.cwd() / 'data'/ 'temp'/ args.output_dir 
+output_dir = Path.cwd() / 'data'/ 'snapshots'/ args.output_dir 
 os.makedirs(output_dir, exist_ok=True)
 
 with open(target_dir,'rb') as f:

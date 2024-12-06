@@ -46,6 +46,7 @@ def crawl_subpages(base_url, session, visited=None, max_depth=10, current_depth=
                 full_url = urljoin(base_url, link["href"])
                 # 같은 도메인 내부 링크만 수집
                 if base_url in full_url and full_url not in visited:
+                    print(f"Find a new subpage:{full_url}")
                     visited.add(full_url)
                     # 재귀적으로 하위 링크 탐색
                     crawl_subpages(full_url, session, visited, max_depth, current_depth + 1)
@@ -56,23 +57,39 @@ def crawl_subpages(base_url, session, visited=None, max_depth=10, current_depth=
 
 if __name__ == '__main__':
     import json
+    import argparse
+    import pandas as pd
+    from pathlib import Path
+
+    # 인자값을 받을 수 있는 인스턴스 생성
+    parser = argparse.ArgumentParser(description='사용법 테스트입니다.')
+
+    # 입력받을 인자값 등록
+    parser.add_argument('--output_dir', required=False, default='crawled_subpages.json',)
+    parser.add_argument('--max_depth', required=False, default=4, type=int)
+
+    args = parser.parse_args()
     
     # 메인 URL
     base_url = "https://www.kead.or.kr/"
+    output_dir = Path.cwd()/ 'data'/ 'temp'/ args.output_dir
 
     # 세션 생성
     session = create_session()
 
     # 하위 페이지 크롤링
-    subpages = crawl_subpages(base_url, session)
-
-    subpages = list(subpages)
+    subpages = crawl_subpages(base_url, max_depth=args.max_depth, session=session)
     
-    with open('/workspace/crawled_subpages.json','w') as f:
+    # #으로 구분되어있지만 사실은 같은 사이트인 경우를 방지
+    series=pd.Series(list(subpages))
+    data = series.map(lambda x: x.split('#')[0])
+    subpages = data.drop_duplicates().to_list()
+    
+    with open(output_dir,'w') as f:
         json.dump(subpages,f,ensure_ascii=False,indent=4)
     
     # 결과 출력
     if subpages:
-        print(f"Found {len(subpages)} Subpages:")
+        print(f"Found {len(subpages)} Subpages")
     else:
         print("No subpages found.")

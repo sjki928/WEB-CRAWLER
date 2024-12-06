@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 # 변수 설정
 crawled_subpages_dir="crawled_subpages"

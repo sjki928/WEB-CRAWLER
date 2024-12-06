@@ -1,5 +1,19 @@
 ## Crawled files
 
+```tree
+.
+|-- snapshots
+|   |-- 2024-12-06
+|   `-- README.md
+`-- temp
+    |-- README.md
+    |-- crawled_data.json
+    |-- crawled_data_onclick.json
+    |-- crawled_subpages.json
+    `-- crawled_subpages_onclick.json
+
+```
+
 1. `crawled_subpages.json`
     - `src/subpages.py`의 base_url인 "https://www.kead.or.kr/" 에서 탐색된 subpage를 저장한 파일입니다.
 2. `crawled_subpages_onclick.json`

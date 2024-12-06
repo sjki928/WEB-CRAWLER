@@ -17,7 +17,7 @@ def setup_driver():
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-
+    chrome_options.add_argument("--remote-debugging-port=9222") 
 
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -84,19 +84,45 @@ def append_results_to_json(file_path, new_results):
 
 # 실행 코드
 if __name__ == "__main__":
-    with open('/workspace/crawled_subpages.json','rb') as f:
-        data = json.load(f)
-    start_urls = list(data.values())
+    import argparse
+    from pathlib import Path
+    from tqdm import tqdm
     
-    output_file = "/workspace/onclick_subpages.json"
+    # 인자값을 받을 수 있는 인스턴스 생성
+    parser = argparse.ArgumentParser(description='사용법 테스트입니다.')
 
+    # 입력받을 인자값 등록
+    parser.add_argument('--target_dir', required=True, default='crawled_subpages.json',)
+    parser.add_argument('--output_dir', required=False, default='onclick_subpages.json',)
+    
+    args = parser.parse_args()
+
+    target_dir = Path.cwd() / 'data'/ 'temp'/ args.target_dir
+    output_file = Path.cwd() / 'data'/ 'temp'/ args.output_dir
+
+    with open(target_dir,'rb') as f:
+        start_urls = json.load(f)
+        
     driver = setup_driver()
 
     try:
-        for url in start_urls:
+        for i,url in enumerate(tqdm(start_urls)):
             print(f"Processing URL: {url}")
             result_urls = process_triggers(driver, url)
             append_results_to_json(output_file, result_urls)
-            print(f"Results from {url} appended to {output_file}.")
+            if i % 30 == 0 and i != 0:
+                driver.quit()
+                driver = setup_driver()
     finally:
         driver.quit()
+
+    import pandas as pd
+
+    with open(output_file,'rb') as f:
+        subpages = json.load(f)
+
+    series=pd.Series(subpages).drop_duplicates()
+    li = series.to_list()
+    
+    with open(output_file, "w") as file:
+        json.dump(li, file, indent=4, ensure_ascii=False)

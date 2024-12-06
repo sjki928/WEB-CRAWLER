@@ -104,6 +104,9 @@ if __name__ == "__main__":
         start_urls = json.load(f)
         
     driver = setup_driver()
+    data = []
+    with open(output_file, 'w',encoding='utf-8') as file:
+        json.dump(data,file,indent=4, ensure_ascii=False)
 
     try:
         for i,url in enumerate(tqdm(start_urls)):

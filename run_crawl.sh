@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # 변수 설정
 crawled_subpages_dir="crawled_subpages"
 crawled_subpages_json="${crawled_subpages_dir}.json"

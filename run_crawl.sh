@@ -3,6 +3,15 @@
 set -e
 set -x
 
+# 스크립트 위치로 이동
+script_dir=$(dirname "$(realpath "$0")")
+cd "$script_dir"
+
+# 로그 파일 경로 설정 (스크립트를 실행한 디렉토리에 생성)
+timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+log_file="execution_log_${timestamp}.out"
+exec > >(tee -a "$log_file") 2>&1
+
 # 변수 설정
 crawled_subpages_dir="crawled_subpages"
 crawled_subpages_json="${crawled_subpages_dir}.json"

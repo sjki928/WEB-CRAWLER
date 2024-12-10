@@ -31,7 +31,7 @@ Website Crawling and Cleaning
 2. `onclick.py` : `subpage.py`로 탐색된 하위페이지에서 클릭을 통해 이동가능한 하위페이지를 탐색합니다.
 3. `text.py` : 1,2의 결과를 바탕으로 텍스트를 크롤링합니다.
 4. `files.py` : 1,2의 결과에서 `directDownload.do` 를 통해 저장될 수 있는 파일들을 저장합니다.
-5. `split.pt` : 3의 결과를 사이트당 하나의 파일로 분리하고, `{title:url}` 쌍으로 저장합니다.
+5. `split.py` : 3의 결과를 사이트당 하나의 파일로 분리하고, `{title:url}` 쌍으로 저장합니다.
 
 ## 2. Demo
 - `src` 내부의 코드들을 실행해보기 위해 시도했던 cell들입니다.

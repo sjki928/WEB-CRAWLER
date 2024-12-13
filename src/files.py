@@ -24,15 +24,11 @@ def setup_session():
     return session
 
 
-def save_failed_url(failed_url, error_message):
+def save_failed_url(failed_url, error_message, output_dir):
     """
     실패한 URL과 에러 메시지를 파일에 저장.
     """
-    failed_dir = "workspace"
-    failed_file = os.path.join(failed_dir, "failed_files.txt")
-
-    if not os.path.exists(failed_dir):
-        os.makedirs(failed_dir)
+    failed_file = os.path.join(output_dir, "failed_files.txt")
 
     with open(failed_file, "a", encoding="utf-8") as file:
         file.write(f"{failed_url} - {error_message}\n")
@@ -76,13 +72,8 @@ def download_file(session, file_url, output_dir):
         if response.status_code == 200:
             # 파일 이름 추출
             file_name = get_file_name_from_response(response, file_url)
-
-            # 저장 디렉토리 생성
-            if not os.path.exists(output_dir):
-                os.makedirs(output_dir)
-            
             # 파일 저장
-            file_path = os.path.join(output_dir,'/workspace/files',file_name)
+            file_path = os.path.join(output_dir,file_name)
             with open(file_path, "wb") as file:
                 for chunk in response.iter_content(chunk_size=8192):
                     file.write(chunk)
@@ -92,10 +83,10 @@ def download_file(session, file_url, output_dir):
             save_failed_url(file_url, f"HTTP {response.status_code}")
     except Exception as e:
         print(f"Error downloading {file_url}: {e}")
-        save_failed_url(file_url, str(e))
+        save_failed_url(file_url, str(e), output_dir)
 
 
-def crawl_files(url, output_dir="workspace"):
+def crawl_files(url, output_dir):
     """
     주어진 URL에서 파일 링크를 파싱하고 다운로드.
     """
@@ -129,10 +120,25 @@ def crawl_files(url, output_dir="workspace"):
         save_failed_url(url, str(e))
         
 if __name__ == '__main__':
-    with open('/workspace/onclick_subpages.json','rb') as f:
+    from pathlib import Path
+    import argparse
+    
+    # 인자값을 받을 수 있는 인스턴스 생성
+    parser = argparse.ArgumentParser(description='사용법 테스트입니다.')
+
+    # 입력받을 인자값 등록
+    parser.add_argument('--target_dir', required=False, default='crawled_subpages.json',)
+    
+    args = parser.parse_args()
+    
+    with open(Path(__file__).parents[1] / 'data' / 'temp' / args.target_dir,'rb') as f:
         subpages = json.load(f)
 
+
+    output_dir = Path(__file__).parents[1] / 'data' / 'files'
+    os.makedirs(output_dir,exist_ok=True)
+    
     # 크롤링 실행
     for url in subpages:
-        crawl_files(url)
+        crawl_files(url,output_dir)
 

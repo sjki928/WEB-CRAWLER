@@ -42,3 +42,9 @@ for file in "${output_files[@]}"; do
 done
 
 echo "All files split!"
+
+# # 파일별로 files.py 실행
+# for file in "${target_files[@]}"; do
+#     echo "Download files in $file..."
+#     python src/files.py --target_dir "$file"
+# done

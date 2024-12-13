@@ -126,7 +126,7 @@ if __name__ == "__main__":
     from datetime import datetime
 
     # 인자값을 받을 수 있는 인스턴스 생성
-    parser = argparse.ArgumentParser(description='사용법 테스트입니다.')
+    parser = argparse.ArgumentParser(description='사이트 들의 텍스트를 cleaning rule에 맞춰 크롤링하는 코드입니다.')
 
     # 입력받을 인자값 등록
     parser.add_argument('--target_dir', required=True, default='crawled_subpages.json',)

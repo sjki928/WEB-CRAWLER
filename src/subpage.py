@@ -62,7 +62,7 @@ if __name__ == '__main__':
     from pathlib import Path
 
     # 인자값을 받을 수 있는 인스턴스 생성
-    parser = argparse.ArgumentParser(description='사용법 테스트입니다.')
+    parser = argparse.ArgumentParser(description='KEAD사이트의 명시된 하위페이지를 재귀적 탐색으로 크롤링하는 코드입니다.')
 
     # 입력받을 인자값 등록
     parser.add_argument('--output_dir', required=False, default='crawled_subpages.json',)

@@ -125,4 +125,3 @@ minute hour day month weekday command
 # system_chk.sh를 월 ~ 금요일 매 5분마다 실행
 */5 * * * 1-5 /bin/bash /path/to/2024-KEAD-DATA/run_crawl.sh
 ```
-```

@@ -47,7 +47,6 @@ Website Crawling and Cleaning
 ```
 - 하나씩 실행도 가능합니다 순서는 1.의 1->2-> 3 or 4 순으로 실행하면 됩니다.
 
-  ```markdown
 # Crontab Installation and Usage
 
 ## Crontab 설치 - CentOS
